@@ -1,0 +1,36 @@
+/*
+  Author: Jacob Williams
+  Purpose: this file contains the style for index.html
+*/
+body{
+  font-family: "Lucida Console", "Courier New", monospace;
+}
+
+#add_user{
+  padding: 30px;
+}
+#add_user input{
+  width: 20%;;
+  margin-bottom: 10px;
+}
+
+#add_user label{
+  padding-left:26px;
+  width: 5%;
+  display:inline-block
+}
+
+#add_item{
+  padding:30px;
+}
+
+#add_item input{
+  width: 20%;;
+  margin-bottom: 10px;
+}
+
+#add_item label{
+  padding-left:26px;
+  width: 5%;
+  display:inline-block
+}

@@ -1,22 +1,47 @@
+<!--
+  Author: Jacob Williams
+  Purpose: this holds the information for the html page to display
+-->
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8"/>
     <title>Ostaa</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="code.js"></script>
   </head>
   <body>
-    <h1>Ostaa</h1>
-    <br>
-    <h1>Login</h1>
-    <div id="login_information">
+    <div id="add_user">
+      <h1>Add User</h1>
       <label for="username">Username</label>
-      <input type="text" name="username" value="">
+      <input type="text" id="username" value="">
+      <br>
       <label for="password">Password</label>
-      <input type="text" name="password" value="">
-      <button type="button" name="login_button">Login</button>
+      <input type="text" id="password" value="">
+      <br>
+      <button type="button" id="add_user_button" onclick="addUser()">Add User</button>
     </div>
-    <br>
-    <h1>Create Account</h1>
-    
+    <div id="add_item">
+      <h1>Add Item</h1>
+      <label for="title">Title</label>
+      <input type="text" id="title" value="">
+      <br>
+      <label for="desc">Desc</label>
+      <input type="text" id="desc" value="">
+      <br>
+      <label for="image">Image</label>
+      <input type="text" id="image" value="">
+      <br>
+      <label for="price">Price</label>
+      <input type="text" id="price" value="">
+      <br>
+      <label for="status">Status</label>
+      <input type="text" id="status" value="">
+      <br>
+      <label for="username_item">Username</label>
+      <input type="text" id="username_item" value="">
+      <br>
+      <button type="button" id="add_item_button" onclick="addItem()">Add Item</button>
+    </div>
   </body>
 </html>
