@@ -6,31 +6,123 @@ body{
   font-family: "Lucida Console", "Courier New", monospace;
 }
 
-#add_user{
-  padding: 30px;
+button{
+  font-family: "Lucida Console", "Courier New", monospace;
 }
-#add_user input{
+
+#Ostaa_header {
+  height: 20%;
+  width: 100%;
+  font-size: 50px;
+  position: fixed;
+  top: 0;
+  left:0;
+  text-align: left;
+  padding-top: 5%;
+}
+/* CSS for index.html */
+#login{
+  height: 80%;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  border-top: black solid 2px;
+  text-align: left;
+}
+
+#login h1{
+  margin-left: 26px;
+}
+
+#login input{
   width: 20%;;
   margin-bottom: 10px;
 }
 
-#add_user label{
+#login #error_message{
+  margin: 30px;
+  color: red;
+}
+
+#login label{
   padding-left:26px;
   width: 5%;
   display:inline-block
 }
 
-#add_item{
-  padding:30px;
+#login button{
+  margin: 30px;
 }
 
-#add_item input{
+/* CSS for home.html */
+
+
+#nav{
+  height: 80%;
+  width: 50%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  border-right: black solid 2px;
+  border-top: black solid 2px;
+  text-align: left;
+}
+
+#nav button{
+  margin: 30px;
+}
+
+#nav input{
+  margin-left: 30px;
+}
+
+#content{
+  height: 80%;
+  width: 50%;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  border-left: black solid 2px;
+  border-top: black solid 2px;
+}
+
+/* CSS for post.html */
+#add_post{
+  height: 80%;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  border-top: black solid 2px;
+  text-align: left;
+}
+
+#add_post h1{
+  margin-left: 26px;
+}
+
+#add_post input{
   width: 20%;;
   margin-bottom: 10px;
 }
 
-#add_item label{
+#add_post label{
   padding-left:26px;
   width: 5%;
   display:inline-block
+}
+
+#add_post button{
+  margin: 30px;
+}
+
+#add_post #add_image{
+  margin-left: 30px;
+  margin-right: 5px;
+}
+
+#add_post #add_image_label{
+  margin-right: 50px;
+  white-space: nowrap;
 }
