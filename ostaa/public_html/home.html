@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <title>Ostaa Home</title>
     <link rel="stylesheet" href="style.css">
+    <script src="code.js"></script>
   </head>
   <body>
     <div id="Ostaa_header">
@@ -13,7 +14,7 @@
       <p id="welcome"></p>
 
       <input type="text" id="search" value="">
-      <button type="button" id="search_listings">Search Listings</button>
+      <button type="button" id="search_listings" onclick='searchListings()'>Search Listings</button>
       <br>
       <button type="button" id="view_listings">View your Listings</button>
       <br>
@@ -25,5 +26,8 @@
     <div id="content">
 
     </div>
+    <script>
+      addWelcome();
+    </script>
   </body>
 </html>

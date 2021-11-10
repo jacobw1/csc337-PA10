@@ -8,6 +8,11 @@
 const express =require('express');
 const mongoose = require('mongoose');
 const app = express();
+const parser = require('body-parser');
+const cookieParser = require('cookie-parser');
+// Tell the express app to pare any body type and to use a cookie parser
+app.use(parser.text({type: '*/*'}));
+app.use(cookieParser());
 //digital ocean -> 143.198.105.222
 const hostname = 'localhost';
 const port = 300;
@@ -44,6 +49,7 @@ app.set('json spaces', 2);
 // allowing res.json()
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+
 // gets all the users in a json format
 app.get('/get/users', function(req, res){
   if(req.url != '/favicon.ico'){
@@ -52,6 +58,7 @@ app.get('/get/users', function(req, res){
     })
   }
 });
+
 // gets all the items in json format
 app.get('/get/items', function(req, res){
   if(req.url != '/favicon.ico'){
@@ -60,6 +67,7 @@ app.get('/get/items', function(req, res){
     })
   }
 });
+
 // given a username, this returns the listings under said username
 app.get('/get/listings/:username',(req, res) =>{
   User.findOne({username: req.params.username }).exec((err, result) =>{
@@ -70,6 +78,7 @@ app.get('/get/listings/:username',(req, res) =>{
       });
     });
 });
+
 // given a username. this returns the purchases of said username
 app.get('/get/purchases/:username',(req, res) =>{
   User.findOne({username: req.params.username }).exec((err, result) =>{
@@ -80,21 +89,25 @@ app.get('/get/purchases/:username',(req, res) =>{
       });
     });
 });
+
 // shows all users given a keyword substring
 app.get('/search/users/:keyword', (req,res) =>{
   User.find({username: {$regex: req.params.keyword }}).exec((err,results) =>{
     res.json(results);
   });
 });
+
 // shows all items with a keyword substring in the description
 app.get('/search/items/:keyword', (req,res) =>{
   Item.find({description: {$regex: req.params.keyword }}).exec((err,results) =>{
     res.json(results);
   });
 });
+
 // post addes a new user to the db
 app.post('/add/user/', (req,res) => {
-  requestData = req.body;
+  requestData = JSON.parse(req.body);
+  console.log(requestData);
   var newUser = new User({
     username: requestData.username,
     password: requestData.password,
@@ -104,10 +117,16 @@ app.post('/add/user/', (req,res) => {
   newUser.save(function(err) {if (err) res.send("FAILED TO ADD USER");});
   res.send('SAVED USER');
 });
+
 // given a username this adds an item to the db
-app.post('/add/item/:username', (req,res) => {
-  requestData = req.body;
-  User.findOne({username: req.params.username})
+app.post('/add/item/', (req,res) => {
+  var c = req.cookies;
+  var u;
+  if(c && c.login){
+    u = c.login.username;
+  }
+  requestData = JSON.parse(req.body);
+  User.findOne({username: u})
   .exec(function(err,result){
     if (err) return res.end('FAIL');
     if (!result) return res.end('FAIL');
@@ -124,9 +143,32 @@ app.post('/add/item/:username', (req,res) => {
 
     newItem.save(function(err) {if (err) res.send('FAILED TO ADD ITEM')});
 
-    res.send('SAVED ITEM');
+    res.end('SAVED ITEM');
   })
 });
+
+app.post('/login/', (req,res) => {
+  requestData = JSON.parse(req.body);
+  var u = requestData.username;
+  var p = requestData.password;
+  User.find({username: u, password: p})
+    .exec(function(err,result){
+      if(err || result.length != 1){
+        res.end('FAILED');
+      }else{
+        res.cookie('login', {username: u}, {maxAge: 120000});
+        res.end(u);
+      }
+    });
+});
+
+app.get('/get/current', (req,res) => {
+  var c = req.cookies;
+  if(c && c.login){
+    res.end(c.login.username);
+  }
+})
+
 // displays url for webpage in startup
 app.listen(port,function () {
   console.log(`App listening at http://${hostname}:${port}`);

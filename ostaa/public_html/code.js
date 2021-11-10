@@ -3,6 +3,39 @@
   Purpose: these are functions that are use when users interact with index.html
   usage: click buttons and enter info in index.html
 */
+
+function login(){
+  var httpRequest = new XMLHttpRequest();
+  if(!httpRequest){
+    return false;
+  }
+  let u = document.getElementById('username').value;
+  let p = document.getElementById('password').value;
+  httpRequest.onreadystatechange = () => {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+        // response from server
+        var response = httpRequest.responseText;
+        if(response == 'FAILED'){
+          document.getElementById('error_message').innerText = 'Issue logging in with that info';
+        }else{
+          window.location.href = 'home.html';
+        }
+
+      } else { alert('ERROR'); }
+    }
+  }
+  loginUser = {'username': u, 'password':p}
+  dataString = JSON.stringify(loginUser);
+
+  let url = '/login/';
+  httpRequest.open('POST',url);
+  httpRequest.setRequestHeader('Content-type', 'application/json');
+  httpRequest.send(dataString);
+}
+
+
+
 // addUser takes information from the text fields and sends them to server.js to be added into the db
 function addUser(){
   var httpRequest = new XMLHttpRequest();
@@ -10,8 +43,8 @@ function addUser(){
     return false;
   }
   // gets info from text inputes
-  let u = document.getElementById('username').value;
-  let p = document.getElementById('password').value;
+  let u = document.getElementById('username_create').value;
+  let p = document.getElementById('password_create').value;
 
   httpRequest.onreadystatechange = () => {
     if (httpRequest.readyState === XMLHttpRequest.DONE) {
@@ -40,16 +73,19 @@ function addItem(){
   // get info
   let t = document.getElementById('title').value;
   let d = document.getElementById('desc').value;
-  let i = document.getElementById('image').value;
+  let i = 'temp_image/' + t + '.jpg'; //document.getElementById('image').value;
   let p = document.getElementById('price').value;
   let s = document.getElementById('status').value;
-  let u = document.getElementById('username_item').value;
 
   httpRequest.onreadystatechange = () => {
     if (httpRequest.readyState === XMLHttpRequest.DONE) {
       if (httpRequest.status === 200) {
 
-        console.log(httpRequest.responseText);
+        if(httpRequest.responseText == 'SAVED ITEM'){
+          window.location.href = 'home.html'
+        }else{
+          console.log("failed to add item");
+        }
 
       } else { alert('ERROR'); }
     }
@@ -58,8 +94,54 @@ function addItem(){
   newItem = {'title':t,'description':d, 'image':i, 'price':p, 'status':s};
   dataString = JSON.stringify(newItem);
 
-  let url = '/add/item/'+u;
+  let url = '/add/item/';
   httpRequest.open('POST',url);
   httpRequest.setRequestHeader('Content-type', 'application/json');
   httpRequest.send(dataString);
+}
+
+function searchListings(){
+  var httpRequest = new XMLHttpRequest();
+  if(!httpRequest){
+    return false;
+  }
+
+  let keyword = document.getElementById('search').value;
+
+  httpRequest.onreadystatechange = () => {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+
+        results = JSON.parse(httpRequest.responseText);
+        for(x in results){
+          console.log(results[x].title);
+        }
+
+      } else { alert('ERROR'); }
+    }
+  }
+
+  let url = '/search/items/'+keyword;
+  httpRequest.open('GET', url);
+  httpRequest.send();
+}
+
+function addWelcome(){
+  var httpRequest = new XMLHttpRequest();
+  if(!httpRequest){
+    return false;
+  }
+  httpRequest.onreadystatechange = () => {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+
+        response = httpRequest.responseText;
+        document.getElementById('welcome').innerText = 'Welcome '+response+'! What would you like to do?';
+
+      } else { alert('ERROR'); }
+    }
+  }
+  let url = '/get/current';
+  httpRequest.open('GET', url);
+  httpRequest.send();
 }
