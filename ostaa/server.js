@@ -69,8 +69,13 @@ app.get('/get/items', function(req, res){
 });
 
 // given a username, this returns the listings under said username
-app.get('/get/listings/:username',(req, res) =>{
-  User.findOne({username: req.params.username }).exec((err, result) =>{
+app.get('/get/listings/user',(req, res) =>{
+  var c = req.cookies;
+  var u;
+  if(c && c.login){
+    u = c.login.username;
+  }
+  User.findOne({username: u }).exec((err, result) =>{
       if (err) return res.end('FAIL');
       if (!result) return res.end('FAIL');
       Item.find({_id: result.listings}).exec((err,listingResults) => {
@@ -80,8 +85,13 @@ app.get('/get/listings/:username',(req, res) =>{
 });
 
 // given a username. this returns the purchases of said username
-app.get('/get/purchases/:username',(req, res) =>{
-  User.findOne({username: req.params.username }).exec((err, result) =>{
+app.get('/get/purchases/user',(req, res) =>{
+  var c = req.cookies;
+  var u;
+  if(c && c.login){
+    u = c.login.username;
+  }
+  User.findOne({username: u }).exec((err, result) =>{
       if (err) return res.end('FAIL');
       if (!result) return res.end('FAIL');
       Item.find({_id: result.purchases}).exec((err,purchasesResults) => {
@@ -167,6 +177,24 @@ app.get('/get/current', (req,res) => {
   if(c && c.login){
     res.end(c.login.username);
   }
+})
+
+app.get('/item/purchase/:id', (req,res) =>{
+  var c = req.cookies;
+  var u;
+  if(c && c.login){
+    u = c.login.username;
+  }
+  var id = req.params.id;
+  Item.findOne({_id: id}).exec(function(err,result){
+    result.stat = 'SOLD';
+    result.save();
+  });
+  User.findOne({username: u}).exec(function(err,result){
+    result.purchases.push(id);
+    result.save();
+  });
+  res.end('SOLD ITEM')
 })
 
 // displays url for webpage in startup

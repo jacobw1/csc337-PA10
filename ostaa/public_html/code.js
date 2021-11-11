@@ -105,23 +105,64 @@ function searchListings(){
   if(!httpRequest){
     return false;
   }
-
   let keyword = document.getElementById('search').value;
 
   httpRequest.onreadystatechange = () => {
     if (httpRequest.readyState === XMLHttpRequest.DONE) {
       if (httpRequest.status === 200) {
-
         results = JSON.parse(httpRequest.responseText);
+        document.getElementById('content').innerHTML = '';
         for(x in results){
-          console.log(results[x].title);
+          document.getElementById('content').innerHTML += createHtmlListing(results[x]);
         }
-
       } else { alert('ERROR'); }
     }
   }
-
   let url = '/search/items/'+keyword;
+  httpRequest.open('GET', url);
+  httpRequest.send();
+}
+
+function getUserListings(){
+  var httpRequest = new XMLHttpRequest();
+  if(!httpRequest){
+    return false;
+  }
+
+  httpRequest.onreadystatechange = () => {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+        results = JSON.parse(httpRequest.responseText);
+        document.getElementById('content').innerHTML = '';
+        for(x in results){
+          document.getElementById('content').innerHTML += createHtmlListing(results[x]);
+        }
+      } else { alert('ERROR'); }
+    }
+  }
+  let url = '/get/listings/user';
+  httpRequest.open('GET', url);
+  httpRequest.send();
+}
+
+function getUserPurchases(){
+  var httpRequest = new XMLHttpRequest();
+  if(!httpRequest){
+    return false;
+  }
+
+  httpRequest.onreadystatechange = () => {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+        results = JSON.parse(httpRequest.responseText);
+        document.getElementById('content').innerHTML = '';
+        for(x in results){
+          document.getElementById('content').innerHTML += createHtmlListing(results[x]);
+        }
+      } else { alert('ERROR'); }
+    }
+  }
+  let url = '/get/purchases/user';
   httpRequest.open('GET', url);
   httpRequest.send();
 }
@@ -144,4 +185,40 @@ function addWelcome(){
   let url = '/get/current';
   httpRequest.open('GET', url);
   httpRequest.send();
+}
+
+function createHtmlListing(data) {
+  var retString = '<div class="content_item" id="' + data._id +' ">';
+  retString += '<p>'+data.title+'</p>';
+  retString += '<p>'+data.image+'</p>';
+  retString += '<p>'+data.description+'</p>';
+  retString += '<p>'+data.price+'</p>';
+  if(data.stat == 'SALE'){
+    retString += '<button type="button" onclick="purchaseItem(\''+data._id+'\')">Buy Now!</button>';
+  }else{
+    retString += '<p> SOLD </p>';
+  }
+  retString += '</div>'
+  return retString;
+}
+
+function purchaseItem(id){
+  var httpRequest = new XMLHttpRequest();
+  if(!httpRequest){
+    return false;
+  }
+  httpRequest.onreadystatechange = () => {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+
+        response = httpRequest.responseText;
+        console.log(response);
+
+      } else { alert('ERROR'); }
+    }
+  }
+  let url = '/item/purchase/'+id;
+  httpRequest.open('GET', url);
+  httpRequest.send()
+
 }

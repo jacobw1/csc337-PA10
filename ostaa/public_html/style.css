@@ -57,7 +57,6 @@ button{
 
 /* CSS for home.html */
 
-
 #nav{
   height: 80%;
   width: 50%;
@@ -77,6 +76,10 @@ button{
   margin-left: 30px;
 }
 
+#nav #welcome{
+  text-align: center;
+}
+
 #content{
   height: 80%;
   width: 50%;
@@ -85,6 +88,13 @@ button{
   bottom: 0;
   border-left: black solid 2px;
   border-top: black solid 2px;
+  overflow: scroll;
+}
+
+#content .content_item{
+  margin: 20px;
+  padding: 20px;
+  border: solid black 3px;
 }
 
 /* CSS for post.html */
