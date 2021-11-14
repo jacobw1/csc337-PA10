@@ -50,7 +50,9 @@ function addUser(){
     if (httpRequest.readyState === XMLHttpRequest.DONE) {
       if (httpRequest.status === 200) {
 
-        console.log(httpRequest.responseText);
+        if(httpRequest.responseText == 'DUPLICATE'){
+          alert('Username already taken');
+        }
 
       } else { alert('ERROR'); }
     }
@@ -113,7 +115,7 @@ function searchListings(){
         results = JSON.parse(httpRequest.responseText);
         document.getElementById('content').innerHTML = '';
         for(x in results){
-          document.getElementById('content').innerHTML += createHtmlListing(results[x]);
+          document.getElementById('content').innerHTML += createHtmlListing(results[x],'Item has been purchased');
         }
       } else { alert('ERROR'); }
     }
@@ -135,7 +137,7 @@ function getUserListings(){
         results = JSON.parse(httpRequest.responseText);
         document.getElementById('content').innerHTML = '';
         for(x in results){
-          document.getElementById('content').innerHTML += createHtmlListing(results[x]);
+          document.getElementById('content').innerHTML += createHtmlListing(results[x],'Item has been purchased');
         }
       } else { alert('ERROR'); }
     }
@@ -157,7 +159,7 @@ function getUserPurchases(){
         results = JSON.parse(httpRequest.responseText);
         document.getElementById('content').innerHTML = '';
         for(x in results){
-          document.getElementById('content').innerHTML += createHtmlListing(results[x]);
+          document.getElementById('content').innerHTML += createHtmlListing(results[x], 'SOLD');
         }
       } else { alert('ERROR'); }
     }
@@ -187,7 +189,7 @@ function addWelcome(){
   httpRequest.send();
 }
 
-function createHtmlListing(data) {
+function createHtmlListing(data,statusString) {
   var retString = '<div class="content_item" id="' + data._id +' ">';
   retString += '<p>'+data.title+'</p>';
   retString += '<p>'+data.image+'</p>';
@@ -196,7 +198,7 @@ function createHtmlListing(data) {
   if(data.stat == 'SALE'){
     retString += '<button type="button" onclick="purchaseItem(\''+data._id+'\')">Buy Now!</button>';
   }else{
-    retString += '<p> SOLD </p>';
+    retString += '<p> '+statusString+' </p>';
   }
   retString += '</div>'
   return retString;
